@@ -3,7 +3,6 @@ import words from "./wordList.json"
 import { HangmanDrawing } from './HangmanDrawing'
 import { HangmanWord } from './HangmanWord'
 import { Keyboard } from './Keyboard'
-import './App.css'
 
 function App() {
   const [wordToGuess, setWordToGuess] = useState(() => {
@@ -18,7 +17,7 @@ function App() {
       flexDirection: "column",
       gap: "2rem",
       margin: "0 auto",
-      alignItems: "center"
+      alignItems: "center",
     }}
     >
       <div style={{
@@ -30,7 +29,9 @@ function App() {
       </div>
       <HangmanDrawing />
       <HangmanWord />
-      <Keyboard />
+      <div style={{ alignSelf: "stretch"}}>
+        <Keyboard />
+      </div>
     </div>
   )
 }
