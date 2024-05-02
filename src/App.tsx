@@ -1,66 +1,71 @@
-import { useEffect, useState } from 'react'
-import words from "./wordList.json"
-import { HangmanDrawing } from './HangmanDrawing'
-import { HangmanWord } from './HangmanWord'
-import { Keyboard } from './Keyboard'
+import { useCallback, useEffect, useState } from "react";
+import words from "./wordList.json";
+import { HangmanDrawing } from "./HangmanDrawing";
+import { HangmanWord } from "./HangmanWord";
+import { Keyboard } from "./Keyboard";
 
 function App() {
   const [wordToGuess, setWordToGuess] = useState(() => {
-    return words[Math.floor(Math.random() * words.length)]
-  })
-  const [guessedLetters, setGuessedLetters] = useState<string[]>([])
+    return words[Math.floor(Math.random() * words.length)];
+  });
+  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
 
   const incorrectLetters = guessedLetters.filter(
-    letter => !wordToGuess.includes(letter)
-)
+    (letter) => !wordToGuess.includes(letter)
+  );
 
-function addGuessedLetter(letter: string) {
-  if (guessedLetters.includes(letter)) return
-  
-  setGuessedLetters(currentLetters => [...currentLetters, letter])
-}
+  const addGuessedLetter = useCallback(
+    (letter: string) => {
+      if (guessedLetters.includes(letter)) return;
 
-useEffect (() => {
-  const handler = (e: KeyboardEvent) => {
-    const key = e.key
+      setGuessedLetters((currentLetters) => [...currentLetters, letter]);
+    },
+    [guessedLetters]
+  );
 
-    if (!key.match(/^[a-z]$/)) return
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const key = e.key;
 
-    e.preventDefault()
-    addGuessedLetter(key)
-  }
+      if (!key.match(/^[a-z]$/)) return;
 
-  document.addEventListener("keypress", handler)
+      e.preventDefault();
+      addGuessedLetter(key);
+    };
 
-  return () => {
-    document.removeEventListener("keypress", handler)
-  }
-}, [])
+    document.addEventListener("keypress", handler);
+
+    return () => {
+      document.removeEventListener("keypress", handler);
+    };
+  }, [guessedLetters]);
 
   return (
-    <div style={{
-      maxWidth: "800px",
-      display: "flex",
-      flexDirection: "column",
-      gap: "2rem",
-      margin: "0 auto",
-      alignItems: "center",
-    }}
+    <div
+      style={{
+        maxWidth: "800px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "2rem",
+        margin: "0 auto",
+        alignItems: "center",
+      }}
     >
-      <div style={{
-        fontSize: "2rem",
-        textAlign: "center"
-      }}>
-        Lose
-        Win
+      <div
+        style={{
+          fontSize: "2rem",
+          textAlign: "center",
+        }}
+      >
+        Lose Win
       </div>
       <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
       <HangmanWord guessedLetters={guessedLetters} wordToGuess={wordToGuess} />
-      <div style={{ alignSelf: "stretch"}}>
+      <div style={{ alignSelf: "stretch" }}>
         <Keyboard />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
