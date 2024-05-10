@@ -63,8 +63,8 @@ export function Keyboard({
           >
             {key}
           </button>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
