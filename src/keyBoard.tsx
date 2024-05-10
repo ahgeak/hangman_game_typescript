@@ -1,4 +1,5 @@
 import styles from "./Keyboard.module.css";
+import { Card, Button } from "react-bootstrap";
 
 const KEYS = [
   "a",
@@ -43,7 +44,28 @@ export function Keyboard({
   addGuessedLetter,
 }: KeyboardProps) {
   return (
-    <div
+    <Card border="solid">
+      <Card.Body style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(75px, 1fr))",
+        gap: ".5rem",
+      }} >
+        {KEYS.map((key) => {
+        const isActive = activeLetters.includes(key);
+        const isInactive = inactiveLetters.includes(key);
+        return (
+          <Button
+            onClick={() => addGuessedLetter(key)}
+            className={`${styles.btn} ${isActive ? styles.active : ""} 
+            ${isInactive ? styles.inactive : ""}`}
+            disabled={isInactive || isActive || disabled}
+            key={key}
+          >
+            {key}
+          </Button>
+        )
+      })}
+    {/* <div
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(75px, 1fr))",
@@ -65,6 +87,8 @@ export function Keyboard({
           </button>
         )
       })}
-    </div>
+    </div> */}
+    </Card.Body>
+    </Card>
   )
 }
